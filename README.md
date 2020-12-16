@@ -30,7 +30,8 @@ as well as flashing some LEDs:
 
 ```./alchitry_cu.py --cpu-type vexriscv --cpu-variant minimal --no-compile-gateware --pack```
 
-Should build and load the board.
+Should build and load the board.  You will need ice40-repack as well as a riscv32 compiler
+(the riscv64 will probably work as well, as it seems to produce 32 bit code just fine).
 
 
 # Typical LiteX design flow:
