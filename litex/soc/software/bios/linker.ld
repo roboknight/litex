@@ -36,9 +36,9 @@ SECTIONS
 
 	.commands :
 	{
-		PROVIDE_HIDDEN (__bios_cmd_start = .);
+		PROVIDE (__bios_cmd_start = .);
 		KEEP(*(.bios_cmd))
-		PROVIDE_HIDDEN (__bios_cmd_end = .);
+		PROVIDE (__bios_cmd_end = .);
 	} > rom
 
 	.data :

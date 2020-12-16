@@ -1092,20 +1092,11 @@ class LiteXSoC(SoC):
 
         # UARTBone / Bridge
         elif name in ["uartbone", "bridge"]:
-            self.add_uartbone(baudrate=baudrate)
+            self.add_uartbone(name=name, baudrate=baudrate)
 
         # Crossover
         elif name in ["crossover"]:
-            self.submodules.uart = uart.UARTCrossover(
-                tx_fifo_depth = fifo_depth,
-                rx_fifo_depth = fifo_depth)
-
-        # Crossover + Bridge
-        elif name in ["crossover+bridge"]:
-            self.add_uartbone(baudrate=baudrate)
-            self.submodules.uart = uart.UARTCrossover(
-                tx_fifo_depth = fifo_depth,
-                rx_fifo_depth = fifo_depth)
+            self.submodules.uart = uart.UARTCrossover()
 
         # Model/Sim
         elif name in ["model", "sim"]:
@@ -1140,6 +1131,7 @@ class LiteXSoC(SoC):
 
         # Classic UART
         else:
+            print("#########################SERIAL name is ".format(name))
             self.submodules.uart_phy = uart.UARTPHY(
                 pads     = self.platform.request(name),
                 clk_freq = self.sys_clk_freq,
@@ -1403,7 +1395,7 @@ class LiteXSoC(SoC):
                 eth_tx_clk)
 
     # Add SPI Flash --------------------------------------------------------------------------------
-    def add_spi_flash(self, name="spiflash", mode="4x", dummy_cycles=None, clk_freq=None):
+    def add_spi_flash(self, name="spiflash", mode="4x", dummy_cycles=None, clk_freq=None, reg_name="spiflash"):
         assert dummy_cycles is not None                 # FIXME: Get dummy_cycles from SPI Flash
         assert mode in ["1x", "4x"]
         if clk_freq is None: clk_freq = self.clk_freq/2 # FIXME: Get max clk_freq from SPI Flash
@@ -1411,12 +1403,12 @@ class LiteXSoC(SoC):
             pads         = self.platform.request(name if mode == "1x" else name + mode),
             dummy        = dummy_cycles,
             div          = ceil(self.clk_freq/clk_freq),
-            with_bitbang = True,
+            with_bitbang = False,
             endianness   = self.cpu.endianness)
         spiflash.add_clk_primitive(self.platform.device)
         setattr(self.submodules, name, spiflash)
         spiflash_region = SoCRegion(origin=self.mem_map.get(name, None), size=0x1000000) # FIXME: Get size from SPI Flash
-        self.bus.add_slave(name=name, slave=spiflash.bus, region=spiflash_region)
+        self.bus.add_slave(name=reg_name, slave=spiflash.bus, region=spiflash_region)
         self.csr.add(name, use_loc_if_exists=True)
 
     # Add SPI SDCard -------------------------------------------------------------------------------

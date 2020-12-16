@@ -7,18 +7,18 @@
  * with logical AND.
  */
 
-//#define UART_POLLING
+#define UART_POLLING
 
 #ifndef UART_POLLING
 
-#define UART_RINGBUFFER_SIZE_RX 128
+#define UART_RINGBUFFER_SIZE_RX 64
 #define UART_RINGBUFFER_MASK_RX (UART_RINGBUFFER_SIZE_RX-1)
 
 static char rx_buf[UART_RINGBUFFER_SIZE_RX];
 static volatile unsigned int rx_produce;
 static unsigned int rx_consume;
 
-#define UART_RINGBUFFER_SIZE_TX 128
+#define UART_RINGBUFFER_SIZE_TX 64
 #define UART_RINGBUFFER_MASK_TX (UART_RINGBUFFER_SIZE_TX-1)
 
 static char tx_buf[UART_RINGBUFFER_SIZE_TX];

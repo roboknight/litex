@@ -35,3 +35,12 @@ class LedChaser(Module, AutoCSR):
                 pads.eq(chaser)
             )
         ]
+
+class LedCtrl(Module, AutoCSR):
+    def __init__(self, pads):
+        self._out = CSRStorage(len(pads), description="LED Output(s) ctl register.")
+
+        # # #
+
+        self.sync += pads.eq(self._out.storage)
+

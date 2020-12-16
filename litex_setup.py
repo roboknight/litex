@@ -177,7 +177,7 @@ if "install" in sys.argv[1:]:
 # RISC-V GCC installation
 if "gcc" in sys.argv[1:]:
     os.chdir(os.path.join(current_path))
-    sifive_riscv_download()
+    #sifive_riscv_download()
     if "riscv64" not in os.environ.get("PATH", ""):
         print("Make sure that the downloaded RISC-V compiler is in your $PATH.")
         print("export PATH=$PATH:$(echo $PWD/riscv64-*/bin/)")

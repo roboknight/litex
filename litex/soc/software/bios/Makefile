@@ -21,8 +21,12 @@ OBJECTS = isr.o			\
 	  cmd_litesata.o    \
 	  main.o
 
+DUMMY_OBJECTS = isr.o \
+		helpers.o \
+		dummy_main.o
+
 ifneq "$(or $(TERM_NO_COMPLETE),$(TERM_MINI))" ""
-CFLAGS += -DTERM_NO_COMPLETE
+CFLAGS += -DTERM_NO_COMPLETE 
 else
 OBJECTS += complete.o
 endif
@@ -38,8 +42,11 @@ else
 OBJECTS += readline.o
 endif
 
-all: bios.bin
-	$(PYTHON) -m litex.soc.software.memusage bios.elf $(CURDIR)/../include/generated/regions.ld $(TRIPLE)
+#all: bios.bin
+#	$(PYTHON) -m litex.soc.software.memusage bios.elf $(CURDIR)/../include/generated/regions.ld $(TRIPLE)
+
+all: dummy.bin
+	$(PYTHON) -m litex.soc.software.memusage dummy.elf $(CURDIR)/../include/generated/regions.ld $(TRIPLE)
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
@@ -54,6 +61,29 @@ endif
 
 bios.elf: $(BIOS_DIRECTORY)/linker.ld $(OBJECTS)
 
+dummy.elf: $(BIOS_DIRECTORY)/linker.ld $(DUMMY_OBJECTS)
+
+#%.elf: ../libbase/crt0.o \
+#	../libcompiler_rt/libcompiler_rt.a \
+#	../libbase/libbase-nofloat.a \
+#	../liblitedram/liblitedram.a \
+#	../libliteeth/libliteeth.a \
+#	../liblitespi/liblitespi.a \
+#	../libfatfs/libfatfs.a \
+#	../liblitesdcard/liblitesdcard.a \
+#	../liblitesata/liblitesata.a
+#	$(LD) $(LDFLAGS) -T $(BIOS_DIRECTORY)/linker.ld -N -o $@ \
+#		../libbase/crt0.o \
+#		$(OBJECTS) \
+#		-L../libcompiler_rt \
+#		-L../libbase \
+#		-L../liblitedram \
+#		-L../libliteeth \
+#		-L../liblitespi \
+#		-L../libfatfs \
+#		-L../liblitesdcard \
+#		-L../liblitesata \
+#		-llitedram -lliteeth -llitespi -lfatfs -llitesdcard -llitesata -lbase-nofloat -lcompiler_rt
 
 %.elf: ../libbase/crt0.o \
 	../libcompiler_rt/libcompiler_rt.a \
@@ -66,7 +96,7 @@ bios.elf: $(BIOS_DIRECTORY)/linker.ld $(OBJECTS)
 	../liblitesata/liblitesata.a
 	$(LD) $(LDFLAGS) -T $(BIOS_DIRECTORY)/linker.ld -N -o $@ \
 		../libbase/crt0.o \
-		$(OBJECTS) \
+		$(DUMMY_OBJECTS) \
 		-L../libcompiler_rt \
 		-L../libbase \
 		-L../liblitedram \
