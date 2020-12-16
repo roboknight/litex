@@ -27,7 +27,9 @@ that can build a vexrisc minimal CPU and run code that outputs to the UART
 as well as flashing some LEDs:
 
 ```./alchitry_cu.py --cpu-type vexriscv --cpu-variant minimal --uart-baudrate 115200 --build```
+
 ```./alchitry_cu.py --cpu-type vexriscv --cpu-variant minimal --no-compile-gateware --pack```
+
 Should build and load the board.
 
 
