@@ -18,7 +18,7 @@ SoC builder to create/develop/debug FPGA SoCs in Python.
 
 **A question or want to get in touch? Our IRC channel is [#litex at freenode.net](https://webchat.freenode.net/?channels=litex)**
 
-# ***roboknight NOTE*** 
+**roboknight NOTE:** 
 This repository contains some changes to simply fit some
 code into an iCE40-HX8K Alchitry CU with NO RAM ... The goal is to use the
 flash for XIP code.  But it isn't there yet.  It has a dirt simple example
